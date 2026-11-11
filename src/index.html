@@ -99,6 +99,14 @@
   .faq details[open] summary::after { transform: rotate(-135deg); margin-top: -2px; }
   .faq details p { margin: 0 0 16px; color: var(--sub); font-size: 15px; }
   footer { color: var(--muted); font-size: 12px; text-align: center; margin-top: 28px; }
+  /* 형제 사이트 연결 카드 */
+  .sib { display: grid; gap: 8px; }
+  .sib a { display: flex; align-items: center; gap: 12px; background: var(--soft); border-radius: 14px; padding: 13px 14px; text-decoration: none; color: var(--text); }
+  .sib a:hover { background: var(--line); }
+  .sib .ic { font-size: 22px; line-height: 1; flex: none; }
+  .sib b { display: block; font-size: 15px; font-weight: 700; }
+  .sib small { display: block; font-size: 13px; color: var(--sub); }
+  .sib .go { margin-left: auto; color: var(--muted); font-size: 18px; flex: none; }
 </style>
 </head>
 <body>
@@ -177,6 +185,15 @@
     <div class="menu">
       <a href="/offers?c=internet"><span>📶</span>인터넷 갈아타기 상담</a>
       <a href="/offers?c=wifi"><span>🛜</span>와이파이 잘 터지게</a>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>함께 보면 좋은 체크리스트</h2>
+    <div class="sib">
+      <a href="https://isa-checklist.pages.dev/"><span class="ic" aria-hidden="true">🚚</span><span><b>이사 체크리스트</b><small>이사 날짜만 넣으면 D-day별 할 일</small></span><span class="go" aria-hidden="true">›</span></a>
+      <a href="https://wedding-dday.pages.dev/"><span class="ic" aria-hidden="true">💍</span><span><b>결혼 준비 D-day</b><small>예식일까지 상견례부터 혼인신고까지</small></span><span class="go" aria-hidden="true">›</span></a>
+      <a href="https://chulsan-checklist.pages.dev/"><span class="ic" aria-hidden="true">🍼</span><span><b>출산 준비 체크리스트</b><small>예정일로 주차별 할 일·출산 가방</small></span><span class="go" aria-hidden="true">›</span></a>
     </div>
   </section>
 
