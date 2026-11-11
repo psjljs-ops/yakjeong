@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{SITE_TITLE}}</title>
+<meta name="theme-color" content="#3182f6">
+<!--SEO-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  /* 메인 페이지에는 제휴 링크를 넣지 않습니다. 제휴 상품은 모두 offers.html 에서 관리합니다. */
+  :root {
+    --bg: #f2f4f6; --card: #ffffff; --text: #191f28; --sub: #4e5968; --muted: #8b95a1;
+    --line: #e5e8eb; --soft: #f2f4f6; --field: #f9fafb;
+    --blue: #3182f6; --blue-press: #1b64da; --blue-soft: #e8f3ff; --blue-text: #1b64da;
+    --green: #00a86b; --green-soft: #e5f8f1; --orange: #f27d00; --orange-soft: #fff3e0;
+    --shadow: 0 2px 12px rgba(0, 27, 55, .06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #101013; --card: #1c1c21; --text: #f2f3f5; --sub: #c3c8cf; --muted: #8b95a1;
+      --line: #2c2c34; --soft: #24242b; --field: #24242b;
+      --blue: #4d94ff; --blue-press: #3182f6; --blue-soft: #1a2a45; --blue-text: #8bb8ff;
+      --green: #2fd39a; --green-soft: #12302a; --orange: #ffa94d; --orange-soft: #33240f;
+      --shadow: none;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    line-height: 1.6; letter-spacing: -0.01em; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 0 16px 48px; }
+  .hero { padding: 36px 4px 8px; }
+  .eyebrow { display: inline-block; font-size: 13px; font-weight: 700; color: var(--blue-text);
+    background: var(--blue-soft); padding: 4px 10px; border-radius: 99px; margin-bottom: 12px; }
+  h1 { font-size: clamp(26px, 7vw, 34px); line-height: 1.3; margin: 0 0 10px; font-weight: 800; letter-spacing: -0.03em; }
+  h1 em { font-style: normal; color: var(--blue); }
+  .lead { color: var(--sub); margin: 0; font-size: 16px; }
+  .card { background: var(--card); border-radius: 22px; padding: 22px; margin-top: 16px; box-shadow: var(--shadow); }
+  h2 { font-size: 19px; font-weight: 800; margin: 0 0 14px; letter-spacing: -0.03em; }
+
+  /* 입력 */
+  .field { margin-top: 18px; }
+  .field:first-of-type { margin-top: 0; }
+  .label { display: block; font-size: 14px; font-weight: 700; color: var(--sub); margin-bottom: 8px; }
+  input[type=date], input[type=number] { width: 100%; font: inherit; font-size: 17px; font-weight: 600; color: var(--text);
+    background: var(--field); border: 1.5px solid var(--line); border-radius: 14px; padding: 13px 14px; outline: none; }
+  input:focus { border-color: var(--blue); }
+  .seg { display: grid; gap: 6px; background: var(--soft); border-radius: 14px; padding: 4px; }
+  .seg.c3 { grid-template-columns: repeat(3, 1fr); }
+  .seg button { font: inherit; font-size: 15px; font-weight: 700; color: var(--sub); background: transparent; border: 0;
+    border-radius: 11px; padding: 10px 4px; cursor: pointer; }
+  .seg button[aria-pressed=true] { background: var(--card); color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+  .hint { font-size: 13px; color: var(--muted); margin: 8px 0 0; }
+  .check { display: flex; gap: 10px; align-items: center; margin-top: 18px; font-size: 15px; font-weight: 600; cursor: pointer; }
+  .check input { width: 20px; height: 20px; accent-color: var(--blue); }
+
+  /* 결과 */
+  .result[hidden] { display: none; }
+  .verdict { border-radius: 16px; padding: 14px 16px; font-weight: 700; font-size: 15px; margin-bottom: 16px; }
+  .verdict.good { background: var(--green-soft); color: var(--green); }
+  .verdict.soon { background: var(--blue-soft); color: var(--blue-text); }
+  .verdict.wait { background: var(--orange-soft); color: var(--orange); }
+  .big { font-size: 15px; color: var(--sub); font-weight: 600; }
+  .big b { display: block; font-size: clamp(30px, 9vw, 38px); color: var(--text); font-weight: 800; letter-spacing: -0.03em; line-height: 1.25; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 18px; }
+  .stat { background: var(--soft); border-radius: 14px; padding: 12px; }
+  .stat small { display: block; font-size: 12px; color: var(--muted); font-weight: 600; }
+  .stat b { font-size: 16px; font-weight: 800; }
+  .bar { height: 10px; background: var(--soft); border-radius: 99px; overflow: hidden; margin-top: 18px; }
+  .bar i { display: block; height: 100%; background: var(--blue); border-radius: 99px; }
+  .barlbl { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .chart { margin-top: 22px; }
+  .chart h3 { font-size: 15px; margin: 0 0 4px; font-weight: 800; }
+  .chart p { margin: 0 0 8px; font-size: 13px; color: var(--sub); }
+  .chart svg { width: 100%; height: auto; display: block; }
+  .btns { display: grid; gap: 8px; margin-top: 18px; }
+  .cta { display: flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none; font: inherit; font-size: 16px; font-weight: 700;
+    border-radius: 14px; padding: 15px 16px; background: var(--blue); color: #fff; border: 0; cursor: pointer; }
+  .cta:hover { background: var(--blue-press); }
+  .cta.ghost { background: var(--blue-soft); color: var(--blue-text); }
+  .note { font-size: 12px; color: var(--muted); margin: 14px 0 0; line-height: 1.5; }
+
+  .menu { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .menu a { background: var(--soft); border-radius: 14px; padding: 16px 14px; text-decoration: none; color: var(--text);
+    font-weight: 700; font-size: 15px; display: flex; gap: 8px; align-items: center; }
+  .menu a:hover { background: var(--line); }
+  .howto { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .howto th, .howto td { text-align: left; padding: 10px 6px; border-top: 1px solid var(--line); vertical-align: top; }
+  .howto tr:first-child th, .howto tr:first-child td { border-top: 0; }
+  .howto th { white-space: nowrap; font-weight: 800; }
+  .howto td { color: var(--sub); }
+  .faq details { border-top: 1px solid var(--line); }
+  .faq details:first-of-type { border-top: 0; }
+  .faq summary { list-style: none; cursor: pointer; font-weight: 700; padding: 16px 28px 16px 0; position: relative; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: ""; position: absolute; right: 4px; top: 50%; width: 8px; height: 8px; margin-top: -6px;
+    border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); transition: transform .2s; }
+  .faq details[open] summary::after { transform: rotate(-135deg); margin-top: -2px; }
+  .faq details p { margin: 0 0 16px; color: var(--sub); font-size: 15px; }
+  footer { color: var(--muted); font-size: 12px; text-align: center; margin-top: 28px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="eyebrow">{{EYEBROW}}</span>
+    <h1>{{HEADLINE_1}}<br><em>{{HEADLINE_2}}</em></h1>
+    <p class="lead">{{TAGLINE}}</p>
+  </header>
+
+  <section class="card" aria-label="약정 정보 입력">
+    <div class="field">
+      <label class="label" for="start">인터넷 가입일 (약정 시작일)</label>
+      <input type="date" id="start">
+    </div>
+    <div class="field">
+      <span class="label">약정 기간</span>
+      <div class="seg c3" data-key="term">
+        <button type="button" data-v="12">1년</button><button type="button" data-v="24">2년</button><button type="button" data-v="36">3년</button>
+      </div>
+    </div>
+    <div class="field">
+      <span class="label">통신사</span>
+      <div class="seg c3" data-key="carrier">
+        <button type="button" data-v="kt">KT</button><button type="button" data-v="sk">SK</button><button type="button" data-v="lg">LG U+</button>
+      </div>
+    </div>
+    <div class="field">
+      <span class="label">인터넷 속도</span>
+      <div class="seg c3" data-key="speed">
+        <button type="button" data-v="100">100M</button><button type="button" data-v="500">500M</button><button type="button" data-v="1000">1G</button>
+      </div>
+    </div>
+    <p class="hint" id="feeInfo"></p>
+    <label class="check"><input type="checkbox" id="tv"> TV도 같은 통신사로 쓰고 있어요</label>
+  </section>
+
+  <section class="card result" id="result" hidden aria-live="polite">
+    <div class="verdict" id="verdict"></div>
+    <div class="big" id="bigLabel">지금 해지하면 예상 위약금<b id="bigValue">-</b></div>
+    <div class="stats">
+      <div class="stat"><small>약정 만료일</small><b id="sEnd">-</b></div>
+      <div class="stat"><small>사용한 기간</small><b id="sUsed">-</b></div>
+      <div class="stat"><small>남은 기간</small><b id="sLeft">-</b></div>
+    </div>
+    <div class="bar"><i id="barFill" style="width:0"></i></div>
+    <div class="barlbl"><span id="bStart"></span><span id="bEnd"></span></div>
+
+    <div class="chart" id="chartBox">
+      <h3>달마다 예상 위약금</h3>
+      <p id="chartText"></p>
+      <svg id="chart" viewBox="0 0 320 130" role="img" aria-label="개월 수에 따른 예상 위약금 그래프"></svg>
+    </div>
+
+    <div class="btns">
+      <a class="cta" id="mainCta" href="/offers?c=internet">약정 끝난 뒤 갈아탈 혜택 비교하기</a>
+      <button class="cta ghost" type="button" id="icsBtn">만료일을 내 캘린더에 저장</button>
+    </div>
+    <p class="note" id="tvNote" hidden>TV를 함께 해지하면 TV 약정 위약금이 따로 붙어요. 결합 할인을 받고 있다면 결합 할인 반환금도 생길 수 있어요.</p>
+    <p class="note">예상 위약금은 공시 요금표로 "채운 기간보다 한 단계 짧은 약정 요금과의 차이 × 사용 개월 수"를 구하고, 약정 절반이 지나면 만료일 0원까지 줄어드는 구조(2023년 개편 이후 가입 기준)로 어림한 값이에요. 결합 할인은 반영하지 않았어요. 설치비·사은품 반환, 장비 미반납 비용은 빠져 있고 통신사·요금제마다 실제 금액이 달라요. 정확한 금액은 아래 방법으로 통신사에서 꼭 확인하세요.</p>
+  </section>
+
+  <section class="card">
+    <h2>정확한 위약금 확인하는 곳</h2>
+    <table class="howto">
+      <tr><th>KT</th><td>마이케이티 앱에서 해지 예상 금액 조회 · 고객센터 국번 없이 100</td></tr>
+      <tr><th>SK브로드밴드</th><td>B tv·SK브로드밴드 고객센터 앱에서 할인반환금 조회 · 고객센터 106</td></tr>
+      <tr><th>LG U+</th><td>당신의 U+ 앱 → 가입정보 → 예상 할인반환금 · 고객센터 101</td></tr>
+    </table>
+    <p class="hint">SKT 이름으로 가입한 인터넷은 SK브로드밴드 상품이라 같은 방식으로 계산돼요.</p>
+  </section>
+
+  <section class="card">
+    <h2>무엇이 필요하세요?</h2>
+    <div class="menu">
+      <a href="/offers?c=internet"><span>📶</span>인터넷 갈아타기 상담</a>
+      <a href="/offers?c=wifi"><span>🛜</span>와이파이 잘 터지게</a>
+    </div>
+  </section>
+
+  <section class="card faq">
+    <h2>자주 묻는 질문</h2>
+    <details><summary>인터넷 위약금은 어떻게 계산되나요?</summary><p>약정 기간 동안 받은 요금 할인을 돌려주는 "할인반환금"이 핵심이에요. 여기에 가입 후 일찍 해지하면 설치비, 받은 사은품 일부가 더해질 수 있어요. 통신사와 요금제마다 반환 비율이 달라서 이 계산기는 대략적인 금액만 보여 드려요.</p></details>
+    <details><summary>약정 중간이 지나면 위약금이 줄어드나요?</summary><p>2023년 하반기 통신사 개편 이후 가입한 3년 약정은 약정 기간의 절반(18개월)이 지나면 할인반환금이 점점 줄어 만료일에 0원이 되는 구조로 안내되고 있어요. 그 전에 가입했다면 계산 방식이 다를 수 있어요.</p></details>
+    <details><summary>약정이 끝나면 무엇을 해야 하나요?</summary><p>지금 통신사에서 재약정 할인을 받을지, 다른 통신사로 신규 가입할지 비교해 보세요. 신규 가입은 사은품 혜택이 붙는 경우가 많아서 약정이 끝난 시점이 갈아타기 가장 부담 없는 때예요.</p></details>
+    <details><summary>이사 가면 위약금을 내야 하나요?</summary><p>같은 통신사로 새집에 이전 설치하면 약정이 그대로 이어져 위약금은 없고 이전 설치비만 들어요. 새집 지역에서 그 통신사 서비스가 안 되면 통신사에 위약금 면제가 되는지 문의해 보세요.</p></details>
+    <details><summary>해지할 때 장비는 어떻게 하나요?</summary><p>모뎀, 공유기, 셋톱박스 같은 임대 장비는 해지 후 반납해야 해요. 반납하지 않거나 잃어버리면 장비 비용을 따로 낼 수 있어요.</p></details>
+  </section>
+
+  <footer>
+    본 계산기는 일반적인 약정 구조로 어림한 참고 자료이며, 실제 금액은 각 통신사 안내를 따릅니다.<br>
+    일부 연결 페이지에는 제휴 링크가 포함되어 있으며, 이를 통해 운영자가 수수료를 받을 수 있습니다.
+  </footer>
+</div>
+
+<script>
+/* 공시 월 요금 (부가세 포함, 인터넷 단독, 참고용) — [무약정, 1년, 2년, 3년] */
+var FEES = {
+  kt: { "100":[39600,34650,29700,22000], "500":[46200,41800,37400,33000], "1000":[55000,49500,44000,38500] },
+  sk: { "100":[36300,31900,29700,22000], "500":[49500,44000,38500,33000], "1000":[55000,49500,44000,38500] },
+  lg: { "100":[51700,42900,34100,24200], "500":[60500,51700,42900,35200], "1000":[64900,57200,49500,40700] }
+};
+var NAMES = { kt:"KT", sk:"SK브로드밴드", lg:"LG U+" };
+var SKEY = "yakjeong-input";
+var S = { start:"", term:"36", carrier:"kt", speed:"500", tv:false };
+try { var saved = JSON.parse(localStorage.getItem(SKEY)); if (saved) for (var k in saved) S[k] = saved[k]; } catch (e) {}
+
+var $ = function (id) { return document.getElementById(id); };
+var won = function (n) { return (Math.round(n / 100) * 100).toLocaleString("ko-KR") + "원"; };
+var WD = ["일","월","화","수","목","금","토"];
+function fmt(d) { return d.getFullYear() + ". " + (d.getMonth()+1) + ". " + d.getDate() + "."; }
+function addMonths(d, m) { var r = new Date(d.getFullYear(), d.getMonth() + m, d.getDate()); if (r.getDate() !== d.getDate()) r.setDate(0); return r; }
+function monthsBetween(a, b) { var m = (b.getFullYear() - a.getFullYear()) * 12 + (b.getMonth() - a.getMonth()); if (b.getDate() < a.getDate()) m--; return m; }
+function save() { try { localStorage.setItem(SKEY, JSON.stringify(S)); } catch (e) {} }
+
+/* 할인반환금 어림 (참고용)
+   - 기준 할인액: 실제로 채운 기간보다 한 단계 짧은 약정 요금과의 차이 (12개월 전 → 무약정, 24개월 전 → 1년 약정, 그 뒤 → 2년 약정)
+   - 기준 할인액 × 사용 개월 수, 약정 절반이 지나면 만료일 0원까지 차례로 줄어듦 (2023년 개편 이후 구조) */
+function penalty(used, term) {
+  if (used >= term || used < 0) return 0;
+  var t = FEES[S.carrier][S.speed], cur = t[term / 12];
+  var shorter = t[Math.min(Math.floor(used / 12), term / 12 - 1)];
+  var v = Math.max(0, shorter - cur) * used;
+  if (used > term / 2) v *= (term - used) / (term / 2);
+  return v;
+}
+function curve(term) { var a = []; for (var m = 0; m <= term; m++) a.push(penalty(m, term)); return a; }
+
+function drawChart(term, used) {
+  var W = 320, H = 130, L = 8, R = 8, T = 12, B = 22, cv = curve(term), peak = Math.max.apply(null, cv) || 1;
+  var x = function (m) { return L + (W - L - R) * m / term; }, y = function (v) { return T + (H - T - B) * (1 - v / peak); };
+  var pts = []; for (var m = 0; m <= term; m++) pts.push(x(m).toFixed(1) + "," + y(cv[m]).toFixed(1));
+  var s = '<line x1="' + L + '" y1="' + (H - B) + '" x2="' + (W - R) + '" y2="' + (H - B) + '" stroke="var(--line)" stroke-width="1"/>';
+  s += '<polygon points="' + x(0) + ',' + (H - B) + ' ' + pts.join(" ") + ' ' + x(term) + ',' + (H - B) + '" fill="var(--blue-soft)"/>';
+  s += '<polyline points="' + pts.join(" ") + '" fill="none" stroke="var(--blue)" stroke-width="2.5" stroke-linejoin="round"/>';
+  [0, term / 2, term].forEach(function (m, i) {
+    s += '<text x="' + x(m) + '" y="' + (H - 6) + '" font-size="11" fill="var(--muted)" text-anchor="' + ["start","middle","end"][i] + '">' + m + '개월</text>';
+  });
+  if (used >= 0 && used <= term) {
+    var cx = x(used), cy = y(cv[used]);
+    s += '<line x1="' + cx + '" y1="' + T + '" x2="' + cx + '" y2="' + (H - B) + '" stroke="var(--orange)" stroke-width="1.5" stroke-dasharray="3 3"/>';
+    s += '<circle cx="' + cx + '" cy="' + cy + '" r="5.5" fill="var(--orange)" stroke="var(--card)" stroke-width="2"/>';
+    s += '<text x="' + Math.min(Math.max(cx, 22), W - 22) + '" y="' + (T - 2) + '" font-size="11" font-weight="700" fill="var(--orange)" text-anchor="middle">지금</text>';
+  }
+  $("chart").innerHTML = s;
+}
+
+var endDate = null;
+function calc() {
+  var term = +S.term, t = FEES[S.carrier][S.speed];
+  $("feeInfo").textContent = NAMES[S.carrier] + " " + (S.speed === "1000" ? "1G" : S.speed + "M") + " 공시 요금 기준: 약정 없이 " + won(t[0]) + " → " + term / 12 + "년 약정 " + won(t[term / 12]) + " (월, 인터넷 단독)";
+  $("tvNote").hidden = !S.tv;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(S.start)) { $("result").hidden = true; return; }
+  var p = S.start.split("-"), start = new Date(+p[0], +p[1]-1, +p[2]);
+  var today = new Date(); today.setHours(0,0,0,0);
+  if (start > today) { $("result").hidden = true; return; }
+  endDate = addMonths(start, term);
+  var used = monthsBetween(start, today), left = Math.max(0, term - used);
+  var daysLeft = Math.round((endDate - today) / 864e5);
+  var pen = penalty(used, term);
+  $("result").hidden = false;
+
+  $("sEnd").textContent = String(endDate.getFullYear()).slice(2) + "." + (endDate.getMonth()+1) + "." + endDate.getDate();
+  $("sUsed").textContent = Math.min(used, term) + "개월";
+  $("sLeft").textContent = daysLeft <= 0 ? "끝남" : (left > 0 ? left + "개월" : daysLeft + "일");
+  $("barFill").style.width = Math.min(100, Math.max(0, (today - start) / (endDate - start) * 100)) + "%";
+  $("bStart").textContent = "가입 " + fmt(start); $("bEnd").textContent = "만료 " + fmt(endDate);
+
+  var v = $("verdict"), cta = $("mainCta");
+  if (daysLeft <= 0) {
+    v.className = "verdict good"; v.textContent = "약정이 끝났어요. 지금 갈아타도 할인반환금이 없어요.";
+    $("bigLabel").firstChild.textContent = "지금 해지하면 예상 위약금"; $("bigValue").textContent = "0원";
+    cta.textContent = "신규 가입 혜택 비교하기";
+  } else if (daysLeft <= 60) {
+    v.className = "verdict soon"; v.textContent = "약정 끝나기 " + daysLeft + "일 전이에요. 만료일 이후로 개통 날짜를 잡으면 위약금 없이 갈아탈 수 있어요.";
+    $("bigLabel").firstChild.textContent = "지금 해지하면 예상 위약금"; $("bigValue").textContent = "약 " + won(pen);
+    cta.textContent = "만료일에 맞춰 갈아탈 혜택 비교하기";
+  } else {
+    var half = used >= term / 2 ? "이미 줄어드는 구간이라 기다릴수록 부담이 줄어요." : "약정 절반(" + term / 2 + "개월)이 지나면 줄어들기 시작해요.";
+    v.className = "verdict wait"; v.textContent = "약정이 " + left + "개월 남았어요. " + half;
+    $("bigLabel").firstChild.textContent = "지금 해지하면 예상 위약금"; $("bigValue").textContent = "약 " + won(pen);
+    cta.textContent = "갈아타면 받는 혜택과 비교해 보기";
+  }
+  var cv = curve(term), peak = Math.max.apply(null, cv);
+  $("chartText").textContent = "가장 클 때 약 " + won(peak) + " (" + cv.indexOf(peak) + "개월째), 그 뒤로 줄어 만료일에 0원";
+  drawChart(term, Math.min(used, term));
+}
+
+/* 입력 연결 */
+document.querySelectorAll(".seg").forEach(function (seg) {
+  var key = seg.dataset.key;
+  function paint() { seg.querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.v === S[key]); }); }
+  seg.addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    S[key] = b.dataset.v; paint(); save(); calc();
+  });
+  paint();
+});
+$("start").max = new Date(Date.now() - new Date().getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
+$("start").value = S.start;
+$("start").addEventListener("input", function () { S.start = this.value; save(); calc(); });
+$("tv").checked = !!S.tv;
+$("tv").addEventListener("change", function () { S.tv = this.checked; save(); calc(); });
+calc();
+
+/* 만료일 캘린더 저장 (.ics) — 만료 2주 전 알림 */
+$("icsBtn").addEventListener("click", function () {
+  if (!endDate) return;
+  var d = function (x) { return x.getFullYear() + String(x.getMonth()+1).padStart(2,"0") + String(x.getDate()).padStart(2,"0"); };
+  var next = new Date(endDate); next.setDate(next.getDate() + 1);
+  var ics = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//yakjeong//KO","BEGIN:VEVENT",
+    "UID:" + d(endDate) + "-yakjeong@pages.dev", "DTSTAMP:" + d(new Date()) + "T000000Z",
+    "DTSTART;VALUE=DATE:" + d(endDate), "DTEND;VALUE=DATE:" + d(next),
+    "SUMMARY:" + NAMES[S.carrier] + " 인터넷 약정 만료",
+    "DESCRIPTION:약정이 끝나는 날이에요. 재약정 할인과 다른 통신사 신규 가입 혜택을 비교해 보세요. https://yakjeong.pages.dev/",
+    "BEGIN:VALARM","TRIGGER:-P14D","ACTION:DISPLAY","DESCRIPTION:인터넷 약정 만료 2주 전","END:VALARM",
+    "END:VEVENT","END:VCALENDAR"].join("\r\n");
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([ics], { type: "text/calendar" }));
+  a.download = "인터넷-약정-만료.ics"; document.body.appendChild(a); a.click(); a.remove();
+});
+</script>
+</body>
+</html>
